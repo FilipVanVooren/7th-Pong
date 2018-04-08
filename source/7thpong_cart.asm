@@ -17,6 +17,9 @@
 *--------------------------------------------------------------
 * This is the cartridge version of "7th Pong". 
 * Runs on an unexpanded console.
+*--------------------------------------------------------------
+* v1.1  Bugfix: Game didn't start if speech synthesizer
+*               was missing resolved that now.
 ********@*****@*********************@**************************
         save  >6000,>7fff
         aorg  >6000
@@ -151,7 +154,11 @@ main1   b     @tmgr               ; Run scheduler
 start   coc   @wbit11,config      ; ANY key pressed ?
         jne   start2
         coc   @wbit3,config       ; Speech synthesizer busy?
-        jeq   start2              ; Yes, ignore key & wait until speech done
+*        
+*  Ulgy bugfix to resolve problem that game did not start when speech synth was missing.
+*  To stay in 4K ROM limit, I don't want to do anything fancy here.
+*
+*       jeq   start2              ; Yes, ignore key & wait until speech done
         b     @setup              ; Setup game
 start2  b     @hookok             ; Exit hook
 
